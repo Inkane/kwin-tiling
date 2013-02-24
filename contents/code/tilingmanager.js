@@ -25,7 +25,7 @@ Qt.include("layout.js");
 Qt.include("spirallayout.js");
 Qt.include("tiling.js");
 Qt.include("tests.js");
-
+Qt.include("helper.js")
 
 /**
  * Class which manages all layouts, connects the various signals and handlers
@@ -97,9 +97,11 @@ function TilingManager() {
     this.layouts[this._currentDesktop][this._currentScreen].activate();
     // Connect the tile list signals so that new tiles are added to the layouts
     this.tiles.tileAdded.connect(function(tile) {
+        debugmsg("tiles.tileAdded");
         self._onTileAdded(tile);
     });
     this.tiles.tileRemoved.connect(function(tile) {
+        debugmsg("tiles.tileRemoved");
         self._onTileRemoved(tile);
     });
     // We need to reset custom client properties first because this might not be
@@ -246,20 +248,39 @@ TilingManager.prototype._onTileAdded = function(tile) {
     // screens/desktops
     var self = this;
     tile.screenChanged.connect(function(oldScreen, newScreen) {
+        debugmsg("_onTileScreenChanged called from tile");
         self._onTileScreenChanged(tile, oldScreen, newScreen);
     });
     tile.desktopChanged.connect(function(oldDesktop, newDesktop) {
+        debugmsg("_onTileDesktopChanged called from tile");
         self._onTileDesktopChanged(tile, oldDesktop, newDesktop);
     });
     tile.movingStarted.connect(function() {
+        debugmsg("_onTileMovingChanged called from tile");
         self._onTileMovingStarted(tile);
     });
     tile.movingEnded.connect(function() {
+        debugmsg("_onTileMovingEnded called from tile");
         self._onTileMovingEnded(tile);
     });
     tile.movingStep.connect(function() {
+        debugmsg("_onTileMovingStep called from tile");
         self._onTileMovingStep(tile);
     });
+    // connect to forcedFloatingChanged to handle it
+    if (tile.forcedFloatingChanged) {
+        tile.forcedFloatingChanged.connect(function(old_state, new_state){
+            if (new_state) { // floating is forced
+                debugmsg("floating is forced, we're removing the tile");
+                self._onTileRemoved(tile);
+            } else if (new_state != old_state) {//floating has been forced, no it's back to tiled
+                debugmsg("tile which was previously in floating mode is readded again");
+                self._onTileAdded(tile); // TODO is this a) really needed; b) dangerous because adding signal twice?
+            }
+        });
+    } else {
+        tile.isConnectedToForcedFloating = true; //FIXME ugly workaround preventing duplicate assign
+    }
     // Add the tile to the layouts
     var client = tile.clients[0];
     var tileLayouts = this._getLayouts(client.desktop, client.screen);

@@ -16,7 +16,10 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 *********************************************************************/
+
+Qt.include("helper.js");
 
 /**
  * Class which implements tiling for a single screen.
@@ -48,6 +51,7 @@ Tiling.prototype.setLayoutType = function(layoutType) {
 }
 
 Tiling.prototype.setLayoutArea = function(area) {
+    debugmsg("setLayoutArea was called from " + arguments.callee.caller.toString());
     this.layout.setLayoutArea(area);
     this._updateAllTiles();
 }
@@ -113,6 +117,7 @@ Tiling.prototype.deactivate = function() {
  * user).
  */
 Tiling.prototype.resetTileSizes = function() {
+    debugmsg("resetTileSizes was called from " + arguments.callee.caller.toString());
     this.layout.resetTileSizes();
     this._updateAllTiles();
 }

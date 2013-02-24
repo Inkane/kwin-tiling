@@ -17,6 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
+Qt.include("helper.js");
 
 /**
  * Class which manages the windows in one tile and handles resize/move and
@@ -180,6 +181,7 @@ Tile.prototype._computeForcedFloating = function() {
 Tile.prototype._updateForcedFloating = function() {
     var forcedFloating = this._computeForcedFloating();
     if (forcedFloating == this.forcedFloating) {
+        debugmsg("forcedFloating didn't change (from Tile.prototype._updateForcedFloating)");
         return;
     }
     this.forcedFloating = forcedFloating;
@@ -187,7 +189,7 @@ Tile.prototype._updateForcedFloating = function() {
 };
 
 Tile.prototype.onClientShadeChanged = function(client) {
-    this._recomputeForcedFloating();
+    this._updateForcedFloating();
 };
 
 Tile.prototype.onClientGeometryChanged = function(client) {
@@ -208,7 +210,7 @@ Tile.prototype.onClientGeometryChanged = function(client) {
 };
 
 Tile.prototype.onClientKeepAboveChanged = function(client) {
-    this._recomputeForcedFloating();
+    this._updateForcedFloating();
 };
 
 Tile.prototype.onClientKeepBelowChanged = function(client) {
@@ -216,11 +218,11 @@ Tile.prototype.onClientKeepBelowChanged = function(client) {
 };
 
 Tile.prototype.onClientFullScreenChanged = function(client) {
-    this._recomputeForcedFloating();
+    this._updateForcedFloating();
 };
 
 Tile.prototype.onClientMinimizedChanged = function(client) {
-    this._recomputeForcedFloating();
+    this._updateForcedFloating();
 };
 
 Tile.prototype.onClientMaximizedStateChanged = function(client) {
