@@ -271,7 +271,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
         debugmsg("_onTileMovingStep called from tile");
         self._onTileMovingStep(tile);
     });
-    // connect to forcedFloatingChanged to handle it
+    // connect to forcedFloatingChanged to handle it FIXME: this should probably be in tilelist.js
     if (tile.forcedFloatingChanged) {
         tile.forcedFloatingChanged.connect(function(old_state, new_state){
             if (new_state) { // floating is forced
@@ -283,7 +283,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
             }
         });
     } else {
-        tile.isConnectedToForcedFloating = true; //FIXME ugly workaround preventing duplicate assign
+        tile.isConnectedToForcedFloating = true; //FIXME ugly workaround preventing duplicate assignment
     }
     // Add the tile to the layouts
     var client = tile.clients[0];
@@ -291,6 +291,17 @@ TilingManager.prototype._onTileAdded = function(tile) {
     tileLayouts.forEach(function(layout) {
         layout.addTile(tile);
     });
+    //unsilence all signals
+    tile.movingStarted.setSilent(false);
+    tile.movingEnded.setSilent(false);
+    tile.movingStep.setSilent(false);
+    tile.resizingStarted.setSilent(false);
+    tile.resizingEnded.setSilent(false);
+    tile.resizingStep.setSilent(false);
+    tile.geometryChanged.setSilent(false);
+    tile.forcedFloatingChanged.setSilent(false);
+    tile.screenChanged.setSilent(false);
+    tile.desktopChanged.setSilent(false);
 };
 
 TilingManager.prototype._onTileRemoved = function(tile) {
@@ -299,6 +310,17 @@ TilingManager.prototype._onTileRemoved = function(tile) {
     tileLayouts.forEach(function(layout) {
         layout.removeTile(tile);
     });
+    //silence all signals FIXME: this doesn't really work as intended, especially when moving windows to different virtual desktops
+    tile.movingStarted.setSilent(true);
+    tile.movingEnded.setSilent(true);
+    tile.movingStep.setSilent(true);
+    tile.resizingStarted.setSilent(true);
+    tile.resizingEnded.setSilent(true);
+    tile.resizingStep.setSilent(true);
+    tile.geometryChanged.setSilent(true);
+    tile.forcedFloatingChanged.setSilent(true);
+    tile.screenChanged.setSilent(true);
+    tile.desktopChanged.setSilent(true);
 };
 
 TilingManager.prototype._onNumberDesktopsChanged = function() {

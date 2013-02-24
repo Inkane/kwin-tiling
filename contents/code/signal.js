@@ -25,7 +25,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 function Signal() {
     this.connected = [];
+    this.silenced = false;
 }
+
+/**
+ * Method which temporarly de-/activates a Signal
+ */
+Signal.prototype.setSilent = function(silent) {
+    this.silenced = silent;
+};
 
 /**
  * Method which connects another handler to the signal.
@@ -55,6 +63,9 @@ Signal.prototype.disconnect = function(f) {
  * this function.
  */
 Signal.prototype.emit = function() {
+    if (this.silenced) {
+        return;
+    }
     var signalArguments = arguments;
     this.connected.forEach(function(f) {
         f.apply(null, signalArguments);
