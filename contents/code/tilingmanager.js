@@ -275,7 +275,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
                 self._onTileRemoved(tile);
             } else if (new_state != old_state) {//floating has been forced, no it's back to tiled
                 debugmsg("tile which was previously in floating mode is readded again");
-                self._onTileAdded(tile); // TODO is this a) really needed; b) dangerous because adding signal twice?
+                self._onTileAdded(tile); // TODO is this really needed or do we need not all actions there?
             }
         });
     } else {
@@ -446,8 +446,17 @@ TilingManager.prototype._switchLayout = function(desktop, screen, layoutIndex) {
 };
 
 TilingManager.prototype._toggleFloating = function(tile) {
-    print("TODO: toggleFloating.");
-    // TODO
+    //TODO make this a bit more sophisticated
+    debugmsg("toggled floating mode, floating is ");
+    self = this;
+    tile.floating = !tile.floating;
+    if (tile.floating) {
+        this._onTileRemoved(tile);
+        // TODO change the properties to keep the tile above everything else
+    } else {
+        this._onTileAdded(tile);
+        //TODO remove keep-above state
+    }
 };
 
 TilingManager.prototype._switchFocus = function(direction) {
