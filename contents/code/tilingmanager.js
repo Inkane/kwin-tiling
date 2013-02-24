@@ -37,7 +37,7 @@ function TilingManager() {
     /**
      * Default layout type which is selected for new layouts.
      */
-    this.defaultLayout = SpiralLayout;
+    this.defaultLayout = TwoThirdLayout;//SpiralLayout;
     /**
      * List of all available layout types.
      */

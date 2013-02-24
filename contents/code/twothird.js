@@ -39,7 +39,7 @@ TwoThirdLayout.prototype.addTile = function() {
         this._createTile(rect);
     } else if (this.tiles.length == 1) {
         // The second tile causes the two-thirds/one-third split
-        var lastRect = this.tile[this.tiles.length - 1].rectangle;
+        var lastRect = this.tiles[this.tiles.length - 1].rectangle;
         var newRect = Qt.rect(lastRect.x,
                               lastRect.y,
                               lastRect.width,
