@@ -156,15 +156,19 @@ function TilingManager() {
     wrapRegShortcut("Toggle Floating",
                      "Toggle Floating",
                      "Meta+F",
-                     function() {
+                    function() {
+        debugmsg("toggle floating state (shortcut)");
         if (!workspace.activeClient) {
+            warn("no active client!")
             return;
         }
-        var tile = tiles.getTile(workspace.activeClient);
+        var tile = self.tiles.getTile(workspace.activeClient);
         if (tile == null) {
+            warn("Couldn't get a tile");
             return;
         }
-        self.toggleFloating(tile);
+        debugmsg(self.toString());
+        self._toggleFloating(tile);
     });
     wrapRegShortcut("Switch Focus Left",
                      "Switch Focus Left",

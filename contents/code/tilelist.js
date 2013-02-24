@@ -18,6 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+Qt.include("helper.js");
+
 /**
  * Class which keeps track of all tiles in the system. The class automatically
  * puts tab groups in one single tile. Tracking of new and removed clients is
@@ -68,6 +70,7 @@ TileList.prototype.addClient = function(client) {
     // We also have to connect other client signals here instead of in Tile
     // because the tile of a client might change over time
     var getTile = function(client) {
+        debugmsg("getTile in tilelist.js was called");
         return self.tiles[client.tiling_tileIndex];
     };
     client.shadeChanged.connect(function() {
