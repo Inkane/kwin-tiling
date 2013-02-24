@@ -130,7 +130,7 @@ function TilingManager() {
         self._onCurrentDesktopChanged();
     });
     // Register keyboard shortcuts
-    registerShortcut("Next Tiling Layout",
+    wrapRegShortcut("Next Tiling Layout",
                      "Next Tiling Layout",
                      "Meta+PgDown",
                      function() {
@@ -140,7 +140,7 @@ function TilingManager() {
                      workspace.activeScreen,
                      nextIndex);
     });
-    registerShortcut("Previous Tiling Layout",
+    wrapRegShortcut("Previous Tiling Layout",
                      "Previous Tiling Layout",
                      "Meta+PgUp",
                      function() {
@@ -153,7 +153,7 @@ function TilingManager() {
                            workspace.activeScreen,
                            nextIndex);
     });
-    registerShortcut("Toggle Floating",
+    wrapRegShortcut("Toggle Floating",
                      "Toggle Floating",
                      "Meta+F",
                      function() {
@@ -166,49 +166,49 @@ function TilingManager() {
         }
         self.toggleFloating(tile);
     });
-    registerShortcut("Switch Focus Left",
+    wrapRegShortcut("Switch Focus Left",
                      "Switch Focus Left",
                      "Meta+H",
                      function() {
         self._switchFocus(Direction.Left);
     });
-    registerShortcut("Switch Focus Right",
+    wrapRegShortcut("Switch Focus Right",
                      "Switch Focus Right",
                      "Meta+L",
                      function() {
         self._switchFocus(Direction.Right);
     });
-    registerShortcut("Switch Focus Up",
+    wrapRegShortcut("Switch Focus Up",
                      "Switch Focus Up",
                      "Meta+K",
                      function() {
         self._switchFocus(Direction.Up);
     });
-    registerShortcut("Switch Focus Down",
+    wrapRegShortcut("Switch Focus Down",
                      "Switch Focus Down",
                      "Meta+J",
                      function() {
         self._switchFocus(Direction.Down);
     });
-    registerShortcut("Move Window Left",
+    wrapRegShortcut("Move Window Left",
                      "Move Window Left",
                      "Meta+Shift+H",
                      function() {
         self._moveTile(Direction.Left);
     });
-    registerShortcut("Move Window Right",
+    wrapRegShortcut("Move Window Right",
                      "Move Window Right",
                      "Meta+Shift+L",
                      function() {
         self._moveTile(Direction.Right);
     });
-    registerShortcut("Move Window Up",
+    wrapRegShortcut("Move Window Up",
                      "Move Window Up",
                      "Meta+Shift+K",
                      function() {
         self._moveTile(Direction.Up);
     });
-    registerShortcut("Move Window Down",
+    wrapRegShortcut("Move Window Down",
                      "Move Window Down",
                      "Meta+Shift+J",
                      function() {
