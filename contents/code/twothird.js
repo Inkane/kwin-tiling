@@ -3,23 +3,23 @@
  * Class which arranges the windows in a spiral with the largest window filling
  * the left half of the screen.
  */
-function SpiralLayout(screenRectangle) {
+function TwoThirdLayout(screenRectangle) {
     Layout.call(this, screenRectangle);
     // TODO
 }
 
-SpiralLayout.name = "twothird";
+TwoThirdLayout.name = "twothird";
 // TODO: Add an image for the layout switcher
-SpiralLayout.image = null;
+TwoThirdLayout.image = null;
 
-SpiralLayout.prototype = new Layout();
-SpiralLayout.prototype.constructor = SpiralLayout;
+TwoThirdLayout.prototype = new Layout();
+TwoThirdLayout.prototype.constructor = TwoThirdLayout;
 
-SpiralLayout.prototype.onLayoutAreaChange = function(oldArea, newArea) {
+TwoThirdLayout.prototype.onLayoutAreaChange = function(oldArea, newArea) {
     // TODO: Scale all tiles
 }
 
-SpiralLayout.prototype.resetTileSizes = function() {
+TwoThirdLayout.prototype.resetTileSizes = function() {
     // Simply erase all tiles and recreate them to recompute the initial sizes
     var tileCount = this.tiles.length;
     this.tiles.length = 0;
@@ -28,8 +28,8 @@ SpiralLayout.prototype.resetTileSizes = function() {
     }
 }
 
-SpiralLayout.prototype.addTile = function() {
-    print("SpiralLayout: addTile");
+TwoThirdLayout.prototype.addTile = function() {
+    print("TwoThirdLayout: addTile");
     if (this.tiles.length == 0) {
         // The first tile fills the whole screen
         var rect = Qt.rect(this.screenRectangle.x,
@@ -61,39 +61,23 @@ SpiralLayout.prototype.addTile = function() {
     var lastRect = this.tiles[this.tiles.length - 1].rectangle;
 }
 
-SpiralLayout.prototype.removeTile = function(tileIndex) {
-    // Increase the size of the tiles in the stacking area
-    if (this.tiles.length > 1) {
-        var tileCount = this.tiles.length - 1;
-        var rects = [
-            this.tiles[tileCount - 1].rectangle,
-            this.tiles[tileCount].rectangle
-        ];
-        var left = Math.min(rects[0].x, rects[1].x);
-        var top = Math.min(rects[0].y, rects[1].y);
-        var right = Math.max(rects[0].x + rects[0].width,
-                             rects[1].x + rects[1].width);
-        var bottom = Math.max(rects[0].y + rects[0].height,
-                              rects[1].y + rects[1].height);
-        var lastRect = Qt.rect(left, top, right - left, bottom - top);
-        this.tiles[tileCount - 1].rectangle = lastRect;
-    }
-    // Remove the last array entry
-    this.tiles.length--;
-    // Fix the neighbour information
-    if (this.tiles.length > 0) {
-        this.tiles[0].neighbours[Direction.Up] = this.tiles.length - 1;
-        var lastTile = this.tiles[this.tiles.length - 1];
-        lastTile.neighbours[Direction.Down] = 0;
-        lastTile.hasDirectNeighbour[Direction.Down] = false;
+TwoThirdLayout.prototype.removeTile = function(tileIndex) {
+    if (tileIndex == 0) {
+        if (this.tiles.length != 1) {
+            // TODO: some tile has to become the new master tile
+        }
+        this.tiles.pop(); // remove last tile
+    } else {
+        this.tiles.pop(tileIndex); //remove tile at index
+        this._updateStackingArea(); // takes care of the rest
     }
 }
 
-SpiralLayout.prototype.resizeTile = function(tileIndex, rectangle) {
+TwoThirdLayout.prototype.resizeTile = function(tileIndex, rectangle) {
     // TODO
 }
 
-SpiralLayout.prototype._createTile = function(rect) {
+TwoThirdLayout.prototype._createTile = function(rect) {
     // Create a new tile and add it to the list
     var tile = {};
     tile.rectangle = rect;
@@ -102,7 +86,7 @@ SpiralLayout.prototype._createTile = function(rect) {
     this.tiles.push(tile);
 }
 
-SpiralLayout.prototype._updateStackingArea = function() {
+TwoThirdLayout.prototype._updateStackingArea = function() {
     // @precondition: this.tiles.length > 0
     // Divide the stacking area into equal chunks
     // set the neighbours
