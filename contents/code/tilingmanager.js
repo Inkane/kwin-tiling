@@ -23,6 +23,7 @@ Qt.include("tile.js");
 Qt.include("tilelist.js");
 Qt.include("layout.js");
 Qt.include("spirallayout.js");
+Qt.include("twothird.js");
 Qt.include("tiling.js");
 Qt.include("tests.js");
 Qt.include("helper.js")
@@ -41,7 +42,8 @@ function TilingManager() {
      * List of all available layout types.
      */
     this.availableLayouts = [
-        SpiralLayout/*,
+        SpiralLayout,
+        TwoThirdLayout/*,
         ZigZagLayout,
         ColumnLayout,
         RowLayout,

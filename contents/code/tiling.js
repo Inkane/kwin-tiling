@@ -47,7 +47,11 @@ function Tiling(screenRectangle, layoutType) {
 }
 
 Tiling.prototype.setLayoutType = function(layoutType) {
-    // TODO
+    // TODO make this more sophisticated
+    tiles = this.layout.tiles;
+    this.layout = layoutType;
+    this.layout.tiles = tiles;
+    this.layout.resetTileSizes();
 }
 
 Tiling.prototype.setLayoutArea = function(area) {
