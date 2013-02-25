@@ -1,0 +1,4 @@
+Note: At best, this software is in an ALPHA state. If you still want to use it
+cd into the build directory and run ./build.sh to install the script
+a list of already know bugs and missfeatures can be found at 
+https://github.com/Inkane/kwin-tiling/issues?state=open

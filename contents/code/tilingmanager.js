@@ -136,6 +136,7 @@ function TilingManager() {
                      "Next Tiling Layout",
                      "Meta+PgDown",
                      function() {
+        debugmsg("pressed Meta+PgDown");
         var currentLayout = self._getCurrentLayoutType();
         var nextIndex = (currentLayout.index + 1) % self.availableLayouts.length;
         self._switchLayout(workspace.currentDesktop - 1,
@@ -146,6 +147,7 @@ function TilingManager() {
                      "Previous Tiling Layout",
                      "Meta+PgUp",
                      function() {
+        debugmsg("pressed Meta+PgUp");
         var currentLayout = self._getCurrentLayoutType();
         var nextIndex = currentLayout.index - 1;
         if (nextIndex < 0) {
@@ -169,7 +171,6 @@ function TilingManager() {
             warn("Couldn't get a tile");
             return;
         }
-        debugmsg(self.toString());
         self._toggleFloating(tile);
     });
     wrapRegShortcut("Switch Focus Left",
@@ -294,6 +295,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
         layout.addTile(tile);
     });
     //unsilence all signals
+    debugmsg("unsilencing all signals");
     tile.movingStarted.setSilent(false);
     tile.movingEnded.setSilent(false);
     tile.movingStep.setSilent(false);
@@ -304,6 +306,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
     tile.forcedFloatingChanged.setSilent(false);
     tile.screenChanged.setSilent(false);
     tile.desktopChanged.setSilent(false);
+    debugmsg("all signals unsilenced");
 };
 
 TilingManager.prototype._onTileRemoved = function(tile) {
@@ -313,6 +316,7 @@ TilingManager.prototype._onTileRemoved = function(tile) {
         layout.removeTile(tile);
     });
     //silence all signals FIXME: this doesn't really work as intended, especially when moving windows to different virtual desktops
+    debugmsg("silencing all signals")
     tile.movingStarted.setSilent(true);
     tile.movingEnded.setSilent(true);
     tile.movingStep.setSilent(true);
@@ -323,6 +327,7 @@ TilingManager.prototype._onTileRemoved = function(tile) {
     tile.forcedFloatingChanged.setSilent(true);
     tile.screenChanged.setSilent(true);
     tile.desktopChanged.setSilent(true);
+    debugmsg("all signals silenced");
 };
 
 TilingManager.prototype._onNumberDesktopsChanged = function() {
@@ -469,15 +474,16 @@ TilingManager.prototype._onCurrentDesktopChanged = function() {
 
 TilingManager.prototype._switchLayout = function(desktop, screen, layoutIndex) {
     // TODO: Show the layout switcher dialog
+    debugmsg("switching the layout on desktop " + desktop + " on screen " + screen + " to layout with index " + layoutIndex);
     var layoutType = this.availableLayouts[layoutIndex];
     this.layouts[desktop][screen].setLayoutType(layoutType);
 };
 
 TilingManager.prototype._toggleFloating = function(tile) {
     //TODO make this a bit more sophisticated
-    debugmsg("toggled floating mode, floating is ");
     self = this;
     tile.floating = !tile.floating;
+    debugmsg("toggled floating mode, floating is " + tile.floating.toString());
     if (tile.floating) {
         this._onTileRemoved(tile);
         // TODO change the properties to keep the tile above everything else
