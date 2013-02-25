@@ -111,6 +111,7 @@ function Tile(firstClient, tileIndex) {
     this._currentDesktop = firstClient.desktop;
 
     this.syncCustomProperties();
+
 }
 
 /**
@@ -284,4 +285,20 @@ Tile.prototype.onClientFinishUserMovedResized = function(client) {
         this._resizing = false;
     }
     this._lastGeometry = null;
+};
+
+Tile.prototype.updateEmitSignals = function() {
+    /*
+     * turns off all signals that are not used in floating mode
+     */
+    debugmsg("updateEmitSignals setSilent to " + (this.floating).toString());
+    this.movingStarted.setSilent(this.floating);
+    this.movingEnded.setSilent(this.floating);
+    this.movingStep.setSilent(this.floating);
+    this.resizingStarted.setSilent(this.floating);
+    this.resizingEnded.setSilent(this.floating);
+    this.resizingStep.setSilent(this.floating);
+    this.geometryChanged.setSilent(this.floating);
+    this.screenChanged.setSilent(this.floating);
+    this.desktopChanged.setSilent(this.floating);
 };

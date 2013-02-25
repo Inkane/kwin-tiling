@@ -31,8 +31,8 @@ function Signal() {
 /**
  * Method which temporarly de-/activates a Signal
  */
-Signal.prototype.setSilent = function(silent) {
-    this.silenced = silent;
+Signal.prototype.setSilent = function(silenced) {
+    this.silenced = silenced;
 };
 
 /**

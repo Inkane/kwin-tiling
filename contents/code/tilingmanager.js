@@ -37,7 +37,7 @@ function TilingManager() {
     /**
      * Default layout type which is selected for new layouts.
      */
-    this.defaultLayout = TwoThirdLayout;//SpiralLayout;
+    this.defaultLayout = SpiralLayout;//TwoThirdLayout;
     /**
      * List of all available layout types.
      */
@@ -294,19 +294,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
     tileLayouts.forEach(function(layout) {
         layout.addTile(tile);
     });
-    //unsilence all signals
-    debugmsg("unsilencing all signals");
-    tile.movingStarted.setSilent(false);
-    tile.movingEnded.setSilent(false);
-    tile.movingStep.setSilent(false);
-    tile.resizingStarted.setSilent(false);
-    tile.resizingEnded.setSilent(false);
-    tile.resizingStep.setSilent(false);
-    tile.geometryChanged.setSilent(false);
-    tile.forcedFloatingChanged.setSilent(false);
-    tile.screenChanged.setSilent(false);
-    tile.desktopChanged.setSilent(false);
-    debugmsg("all signals unsilenced");
+    tile.updateEmitSignals();
 };
 
 TilingManager.prototype._onTileRemoved = function(tile) {
@@ -316,18 +304,7 @@ TilingManager.prototype._onTileRemoved = function(tile) {
         layout.removeTile(tile);
     });
     //silence all signals FIXME: this doesn't really work as intended, especially when moving windows to different virtual desktops
-    debugmsg("silencing all signals")
-    tile.movingStarted.setSilent(true);
-    tile.movingEnded.setSilent(true);
-    tile.movingStep.setSilent(true);
-    tile.resizingStarted.setSilent(true);
-    tile.resizingEnded.setSilent(true);
-    tile.resizingStep.setSilent(true);
-    tile.geometryChanged.setSilent(true);
-    tile.forcedFloatingChanged.setSilent(true);
-    tile.screenChanged.setSilent(true);
-    tile.desktopChanged.setSilent(true);
-    debugmsg("all signals silenced");
+    tile.updateEmitSignals();
 };
 
 TilingManager.prototype._onNumberDesktopsChanged = function() {
@@ -485,9 +462,11 @@ TilingManager.prototype._toggleFloating = function(tile) {
     tile.floating = !tile.floating;
     debugmsg("toggled floating mode, floating is " + tile.floating.toString());
     if (tile.floating) {
+        debugmsg("untile the tile");
         this._onTileRemoved(tile);
         // TODO change the properties to keep the tile above everything else
     } else {
+        debugmsg("tile the tile");
         this._onTileAdded(tile);
         //TODO remove keep-above state
     }
