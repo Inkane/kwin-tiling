@@ -1,3 +1,6 @@
+
+"use strict";
+
 Qt.include("helper.js");
 
 /**

@@ -18,6 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+"use strict";
+
 /**
  * Class which arranges the windows in a spiral with the largest window filling
  * the left half of the screen.

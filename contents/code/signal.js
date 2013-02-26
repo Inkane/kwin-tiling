@@ -18,6 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+"use strict";
+
 /**
  * Class which manages connections to a signal and allows for signal/slot event
  * handling.
