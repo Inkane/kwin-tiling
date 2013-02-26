@@ -1,3 +1,5 @@
+"use strict";
+
 function debugmsg(msg) {
     print(">>>>Debug: " + msg)
 }

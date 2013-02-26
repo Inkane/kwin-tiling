@@ -279,10 +279,13 @@ TilingManager.prototype._onTileAdded = function(tile) {
     // connect to forcedFloatingChanged to handle it FIXME: this should probably be in tilelist.js
     if (tile.forcedFloatingChanged) {
         tile.forcedFloatingChanged.connect(function(old_state, new_state){
+            if ((old_state === new_state) || (tile.floating)) {
+                return; // nothing to do
+            }
             if (new_state) { // floating is forced
                 debugmsg("floating is forced, we're removing the tile");
                 self._onTileRemoved(tile);
-            } else if (new_state != old_state) {//floating has been forced, no it's back to tiled
+            } else  {//floating has been forced, now it's back to tiled (if it wasn't floating before)
                 debugmsg("tile which was previously in floating mode is readded again");
                 self._onTileAdded(tile); // TODO is this really needed or do we need not all actions there?
             }
@@ -462,6 +465,9 @@ TilingManager.prototype._toggleFloating = function(tile) {
     //TODO make this a bit more sophisticated
     self = this;
     tile.floating = !tile.floating;
+    if (tile.floating == tile.forcedFloating) {
+        return;// we have nothing to do
+    }
     debugmsg("toggled floating mode, floating is " + tile.floating.toString());
     if (tile.floating) {
         debugmsg("untile the tile");
