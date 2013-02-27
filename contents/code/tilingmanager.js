@@ -169,11 +169,14 @@ function TilingManager() {
             return;
         }
         var tile = self.tiles.getTile(workspace.activeClient);
+        debugmsg("after var tile");
         if (tile == null) {
             warn("Couldn't get a tile");
             return;
         }
+        debugmsg("before call to _toggleFloating");
         self._toggleFloating(tile);
+        debugmsg("after call to _toggleFloating");
     });
     wrapRegShortcut("Switch Focus Left",
                      "Switch Focus Left",
@@ -379,7 +382,9 @@ TilingManager.prototype._onTileScreenChanged =
 TilingManager.prototype._onTileDesktopChanged =
         function(tile, oldDesktop, newDesktop) {
     var client = tile.clients[0];
+    debugmsg("after var client");
     var oldLayouts = this._getLayouts(oldDesktop, client.screen);
+    debugmsg("oldLayouts: " + oldLayouts.toString());
     var newLayouts = this._getLayouts(newDesktop, client.screen);
     this._changeTileLayouts(tile, oldLayouts, newLayouts);
 };
@@ -437,11 +442,13 @@ TilingManager.prototype._changeTileLayouts =
         function(tile, oldLayouts, newLayouts) {
     oldLayouts.forEach(function(layout) {
         if (newLayouts.indexOf(layout) == -1) {
+            debugmsg("changeTileLayout: removing tile");
             layout.removeTile(tile);
         }
     });
     newLayouts.forEach(function(layout) {
         if (oldLayouts.indexOf(layout) == -1) {
+            debugmsg("changeTileLayout: adding tile");
             layout.addTile(tile);
         }
     });
@@ -463,9 +470,11 @@ TilingManager.prototype._switchLayout = function(desktop, screen, layoutIndex) {
 
 TilingManager.prototype._toggleFloating = function(tile) {
     //TODO make this a bit more sophisticated
-    self = this;
+    var self = this;
     tile.floating = !tile.floating;
-    if (tile.floating == tile.forcedFloating) {
+    debugmsg("before comparision");
+    if (tile.floating === tile.forcedFloating && tile.floating === true) {
+        debugmsg("tiling state doesn't require a change");
         return;// we have nothing to do
     }
     debugmsg("toggled floating mode, floating is " + tile.floating.toString());
