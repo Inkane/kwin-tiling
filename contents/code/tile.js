@@ -292,14 +292,15 @@ Tile.prototype.updateEmitSignals = function() {
     /*
      * turns off all signals that are not used in floating mode
      */
-    debugmsg("updateEmitSignals setSilent to " + (this.floating).toString());
-    this.movingStarted.setSilent(this.floating);
-    this.movingEnded.setSilent(this.floating);
-    this.movingStep.setSilent(this.floating);
-    this.resizingStarted.setSilent(this.floating);
-    this.resizingEnded.setSilent(this.floating);
-    this.resizingStep.setSilent(this.floating);
-    this.geometryChanged.setSilent(this.floating);
-    this.screenChanged.setSilent(this.floating);
-    this.desktopChanged.setSilent(this.floating);
+    var is_floating = this.floating || this.forcedFloating;
+    debugmsg("updateEmitSignals setSilent to " + (is_floating).toString());
+    this.movingStarted.setSilent(is_floating);
+    this.movingEnded.setSilent(is_floating);
+    this.movingStep.setSilent(is_floating);
+    this.resizingStarted.setSilent(is_floating);
+    this.resizingEnded.setSilent(is_floating);
+    this.resizingStep.setSilent(is_floating);
+    this.geometryChanged.setSilent(is_floating);
+    this.screenChanged.setSilent(is_floating);
+    this.desktopChanged.setSilent(is_floating);
 };
