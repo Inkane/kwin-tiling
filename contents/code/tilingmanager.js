@@ -56,6 +56,7 @@ function TilingManager() {
     for (var i = 0; i < this.availableLayouts.length; i++) {
         this.availableLayouts[i].index = i;
     }
+    this.hackycounter = 0;
     /**
      * Number of desktops in the system.
      */
@@ -435,7 +436,7 @@ TilingManager.prototype._onTileMovingStep = function(tile) {
     // Show an outline where the window would be placed
     // TODO: This is not working yet, the window movement code already disables
     // any active outline
-    workspace.showOutline(targetArea);
+    //workspace.showOutline(targetArea);
 }
 
 TilingManager.prototype._changeTileLayouts =
@@ -452,13 +453,12 @@ TilingManager.prototype._changeTileLayouts =
             layout.addTile(tile);
         }
     });
+    this._refresh();
 };
 
 TilingManager.prototype._onCurrentDesktopChanged = function() {
     // TODO: This is wrong, we need to activate *all* visible layouts
-    this.layouts[this._currentDesktop][this._currentScreen].deactivate();
-    this._currentDesktop = workspace.currentDesktop - 1;
-    this.layouts[this._currentDesktop][this._currentScreen].activate();
+    this._refresh();
 };
 
 TilingManager.prototype._switchLayout = function(desktop, screen, layoutIndex) {
@@ -534,4 +534,10 @@ TilingManager.prototype._getLayouts = function(desktop, screen) {
         }
         return result;
     }
+}
+
+TilingManager.prototype._refresh = function() {
+    this.layouts[this._currentDesktop][this._currentScreen].deactivate();
+    this._currentDesktop = workspace.currentDesktop - 1;
+    this.layouts[this._currentDesktop][this._currentScreen].activate();
 }

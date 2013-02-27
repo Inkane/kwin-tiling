@@ -123,7 +123,6 @@ Tiling.prototype.deactivate = function() {
  * user).
  */
 Tiling.prototype.resetTileSizes = function() {
-    debugmsg("resetTileSizes was called from " + arguments.callee.caller.toString());
     this.layout.resetTileSizes();
     this._updateAllTiles();
 }
