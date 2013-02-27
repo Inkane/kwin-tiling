@@ -56,7 +56,6 @@ function TilingManager() {
     for (var i = 0; i < this.availableLayouts.length; i++) {
         this.availableLayouts[i].index = i;
     }
-    this.hackycounter = 0;
     /**
      * Number of desktops in the system.
      */
