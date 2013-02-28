@@ -113,6 +113,8 @@ function Tile(firstClient, tileIndex) {
 
     this.syncCustomProperties();
 
+    this.no_remove = false; // FIXME: ugly hack, see tilingmanager for explanation
+
 }
 
 /**

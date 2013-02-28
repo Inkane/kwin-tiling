@@ -29,6 +29,7 @@ Qt.include("twothird.js");
 Qt.include("tiling.js");
 Qt.include("tests.js");
 Qt.include("helper.js")
+Qt.include("json.js");
 
 /**
  * Class which manages all layouts, connects the various signals and handlers
@@ -288,9 +289,11 @@ TilingManager.prototype._onTileAdded = function(tile) {
             if (new_state) { // floating is forced
                 debugmsg("floating is forced, we're removing the tile");
                 self._onTileRemoved(tile);
+                tile.no_remove = true; // FIXME ugly hack which prevents removing a tile twice (happens when a tile in floating mode is closed)
             } else  {//floating has been forced, now it's back to tiled (if it wasn't floating before)
                 debugmsg("tile which was previously in floating mode is readded again");
                 self._onTileAdded(tile); // TODO is this really needed or do we need not all actions there?
+                tile.no_remove = false; // FIXME ugly hack which prevents removing a tile twice (happens when a tile in floating mode is closed)
             }
         });
     } else {
@@ -299,16 +302,27 @@ TilingManager.prototype._onTileAdded = function(tile) {
     // Add the tile to the layouts
     var client = tile.clients[0];
     var tileLayouts = this._getLayouts(client.desktop, client.screen);
+    //debugmsg(JSON.stringify(tileLayouts, 'null', "  "));
     tileLayouts.forEach(function(layout) {
+	debugmsg("adding tile to layout");
         layout.addTile(tile);
     });
     tile.updateEmitSignals();
 };
 
 TilingManager.prototype._onTileRemoved = function(tile) {
+    //FIXME: this is a workaround, needs to be fixed at a different place
+    if (tile.no_remove) {
+        debugmsg("tile is floating, no need to remove it");
+        return;  
+    } else {
+        debugmsg("no_remove is false");
+    }
     var client = tile.clients[0];
     var tileLayouts = this._getLayouts(client.desktop, client.screen);
+    //debugmsg(JSON.stringify(tileLayouts, 'null', "  "));
     tileLayouts.forEach(function(layout) {
+	debugmsg("removing tile from layout");
         layout.removeTile(tile);
     });
     //silence all signals FIXME: this doesn't really work as intended, especially when moving windows to different virtual desktops
@@ -468,7 +482,8 @@ TilingManager.prototype._switchLayout = function(desktop, screen, layoutIndex) {
 };
 
 TilingManager.prototype._toggleFloating = function(tile) {
-    //TODO make this a bit more sophisticated
+    // TODO make this a bit more sophisticated
+    // TODO
     var self = this;
     tile.floating = !tile.floating;
     debugmsg("before comparision");
@@ -480,10 +495,12 @@ TilingManager.prototype._toggleFloating = function(tile) {
     if (tile.floating) {
         debugmsg("untile the tile");
         this._onTileRemoved(tile);
+        tile.no_remove = true; // FIXME ugly hack which prevents removing a tile twice (happens when a tile in floating mode is closed)
         // TODO change the properties to keep the tile above everything else
     } else {
         debugmsg("tile the tile");
         this._onTileAdded(tile);
+        tile.no_remove = false; // FIXME ugly hack which prevents removing a tile twice (happens when a tile in floating mode is closed)
         //TODO remove keep-above state
     }
 };
