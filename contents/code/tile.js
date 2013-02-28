@@ -174,9 +174,11 @@ Tile.prototype.syncCustomProperties = function() {
 Tile.prototype._computeForcedFloating = function() {
     var forcedFloating = false;
     this.clients.forEach(function(client) {
+        debugmsg("shade: " + client.shade + " minimized: " + client.minimized + " keepAbove: " + client.keepAbove + "\nfullScreen: " + client.fullScreen + "!resizeable: " + (!client.resizeable) + "");
         if (client.shade || client.minimized || client.keepAbove
                 || client.fullScreen || !client.resizeable) {
             forcedFloating = true;
+            debugmsg("computed forced floating, it is true");
         }
     });
     return forcedFloating;

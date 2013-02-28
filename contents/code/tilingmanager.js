@@ -281,7 +281,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
         self._onTileMovingStep(tile);
     });
     // connect to forcedFloatingChanged to handle it FIXME: this should probably be in tilelist.js
-    if (tile.forcedFloatingChanged) {
+    if (tile.isConnectedToForcedFloating) {
         tile.forcedFloatingChanged.connect(function(old_state, new_state){
             if ((old_state === new_state) || (tile.floating)) {
                 return; // nothing to do
@@ -302,11 +302,11 @@ TilingManager.prototype._onTileAdded = function(tile) {
     // Add the tile to the layouts
     var client = tile.clients[0];
     var tileLayouts = this._getLayouts(client.desktop, client.screen);
-    //debugmsg(JSON.stringify(tileLayouts, 'null', "  "));
     tileLayouts.forEach(function(layout) {
 	debugmsg("adding tile to layout");
         layout.addTile(tile);
     });
+    debugmsg(JSON.stringify(tile, 'null', "  "));
     tile.updateEmitSignals();
 };
 
@@ -320,7 +320,6 @@ TilingManager.prototype._onTileRemoved = function(tile) {
     }
     var client = tile.clients[0];
     var tileLayouts = this._getLayouts(client.desktop, client.screen);
-    //debugmsg(JSON.stringify(tileLayouts, 'null', "  "));
     tileLayouts.forEach(function(layout) {
 	debugmsg("removing tile from layout");
         layout.removeTile(tile);
