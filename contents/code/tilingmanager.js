@@ -281,7 +281,7 @@ TilingManager.prototype._onTileAdded = function(tile) {
         self._onTileMovingStep(tile);
     });
     // connect to forcedFloatingChanged to handle it FIXME: this should probably be in tilelist.js
-    if (tile.isConnectedToForcedFloating) {
+    if (!tile.isConnectedToForcedFloating) {
         tile.forcedFloatingChanged.connect(function(old_state, new_state){
             if ((old_state === new_state) || (tile.floating)) {
                 return; // nothing to do
@@ -296,9 +296,8 @@ TilingManager.prototype._onTileAdded = function(tile) {
                 tile.no_remove = false; // FIXME ugly hack which prevents removing a tile twice (happens when a tile in floating mode is closed)
             }
         });
-    } else {
-        tile.isConnectedToForcedFloating = true; //FIXME ugly workaround preventing duplicate assignment
-    }
+        tile.isConnectedToForcedFloating = true;
+    } 
     // Add the tile to the layouts
     var client = tile.clients[0];
     var tileLayouts = this._getLayouts(client.desktop, client.screen);

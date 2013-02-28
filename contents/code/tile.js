@@ -113,6 +113,7 @@ function Tile(firstClient, tileIndex) {
 
     this.syncCustomProperties();
 
+    this.isConnectedToForcedFloating = false;
     this.no_remove = false; // FIXME: ugly hack, see tilingmanager for explanation
 
 }
